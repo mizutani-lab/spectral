@@ -159,6 +159,19 @@ Practical enough to compute a few small eigenvalues (there are numerical techniq
   Note that your proof should exploit the symmetry of $\bm{M}$, as this statement is false otherwise.
 \end{exercise}
 
+\begin{proof}
+    \begin{align*}
+      (\mu - \nu)\left\langle \bm{\psi}, \bm{\phi} \right\rangle
+      &= \mu \bm{\psi}^T \bm{\phi} - \nu \bm{\psi}^T \bm{\phi}\\
+      &= (\bm{M}\bm{\psi})^T \bm{\phi} - \bm{\psi}^T (\bm{M}\bm{\phi})\\
+      &= \bm{\psi}^T \bm{M}^T \bm{\phi} - \bm{\psi}^T \bm{M}\bm{\phi}\\
+      &= \bm{\psi}^T (\bm{M}^T -  \bm{M}) \bm{\phi}\\
+      &= 0
+    \end{align*}
+    If $\mu \neq \nu$, then $\left\langle \bm{\psi}, \bm{\phi} \right\rangle = 0$,
+    and thus $\bm{\psi}$ is orthogonal to $\bm{\phi}$.
+\end{proof}
+
 \begin{exercise}[taken from Matthew Hirn's Spring 2021 CMSE 890-001 Homework 01]
   Let $\bm{M}$ be a symmetric, real valued matrix with eigenvalues $\lambda_1,\ldots,\lambda_n$ and
   orthonormal eigenvectors $\bm{\psi}_1,\ldots,\bm{\psi}_n$.
