@@ -62,7 +62,7 @@
   
   \item Total variation: $TV_G(\bm{x}) := \sum_{ab \in E} w(a,b) \left|\bm{x}(a) - \bm{x}(b)\right|$.
   \item Laplacian for random walk: $\bm{L}_{RW} := (\bm{D}-\bm{M})\bm{D}^{-1} = \bm{I} - \bm{M}\bm{D}$
-  \item Symmetric Laplacian: $\bm{L}_{SYM} := \bm{I} - \bm{D}^{-1/2}\bm{M}\bm{D}^{-1/2}$
+  \item Symmetric Laplacian for random walk: $\bm{L}_{SYM} := \bm{I} - \bm{D}^{-1/2}\bm{M}\bm{D}^{-1/2}$
 
   \textcolor{red}{Why is this useful?}
 
@@ -113,8 +113,40 @@ Practical enough to compute a few small eigenvalues (there are numerical techniq
 \begin{exercise} Show that $\bm{W}$ is similar to a symmetric matrix.
 \end{exercise}
 
-\begin{exercise} Show $\bm{x}^T\bm{L}\bm{x} = \sum_{ab \in E} w(a,b)(\bm{x}(a) - \bm{x}(b))^2$.
+\begin{proof}
+  $\bm{W}$ and $X$ are similar if there exists an invertible $P$ such that $X=P^{-1} \bm{W} P$.
+  Let $P=\bm{D}^{1/2}$. Then,
+  $X=(\bm{D}^{1/2})^{-1} \bm{W} \bm{D}^{1/2}
+   = \bm{D}^{-1/2} \bm{M} \bm{D}^{-1} \bm{D}^{1/2}
+   = \bm{D}^{-1/2} \bm{M} \bm{D}^{-1/2}$.
+  $X$ is symmetric because $X^T
+  = \left(\bm{D}^{-1/2} \bm{M} \bm{D}^{-1/2}\right)^T
+  = \left(\bm{D}^{-1/2}\right)^T \bm{M}^T \left(\bm{D}^{-1/2}\right)^T
+  = \bm{D}^{-1/2} \bm{M} \bm{D}^{-1/2} = X$.
+\end{proof}
+
+\begin{exercise} Show $\bm{x}^T\bm{L}\bm{x} = \sum_{ij \in E} w(i,j)(\bm{x}(i) - \bm{x}(j))^2$.
 \end{exercise}
+
+\begin{proof}
+  \begin{align*}
+    \bm{x}^T\bm{L}\bm{x} &= \bm{x}^T(\bm{D} - \bm{M})\bm{x}\\
+    &= \bm{x}^T \bm{D}\bm{x} - \bm{x}^T \bm{M}\bm{x}\\
+    &= \left(\sum_{i=1}^n \sum_{j=1}^n \bm{D}(i,j) \bm{x}(i) \bm{x}(j)\right)
+    - \left(\sum_{i=1}^n \sum_{j=1}^n \bm{M}(i,j) \bm{x}(i) \bm{x}(j)\right)\\
+    &= \left(\sum_{i=1}^n (\bm{M}\bm{1})(i) \bm{x}(i) \bm{x}(i)\right)
+    - 2 \left(\sum_{ij \in E} w(i,j) \bm{x}(i) \bm{x}(j)\right)\\
+    &= \left(\sum_{i=1}^n \sum_{j=1}^n w(i,j) \bm{x}(i)^2\right)
+    - 2 \left(\sum_{ij \in E} w(i,j) \bm{x}(i) \bm{x}(j)\right)\\
+    &= 2\left(\sum_{ij \in E} w(i,j) \bm{x}(i)^2\right)
+    - 2 \left(\sum_{ij \in E} w(i,j) \bm{x}(i) \bm{x}(j)\right)\\
+    &= \left(\sum_{ij \in E} w(i,j) \bm{x}(i)^2\right)
+    - 2 \left(\sum_{ij \in E} w(i,j) \bm{x}(i) \bm{x}(j)\right)
+    + \left(\sum_{ij \in E} w(i,j) \bm{x}(j)^2\right)\\
+    &= \sum_{ij \in E} w(i,j) \left(\bm{x}(i)^2 - 2 \bm{x}(i) \bm{x}(j) + \bm{x}(j)^2\right)\\
+    &= \sum_{ij \in E} w(i,j)(\bm{x}(i) - \bm{x}(j))^2
+  \end{align*}
+\end{proof}
 
 \begin{exercise}[taken from Matthew Hirn's Spring 2021 CMSE 890-001 Homework 01]
   Let $\bm{M}$ be a symmetric, real valued matrix, and let $\bm{\psi}$ and $\bm{\phi}$ be two eigenvectors of $\bm{M}$
