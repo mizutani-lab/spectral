@@ -148,7 +148,11 @@ Practical enough to compute a few small eigenvalues (there are numerical techniq
   \end{align*}
 \end{proof}
 
-\begin{exercise}[taken from Matthew Hirn's Spring 2021 CMSE 890-001 Homework 01]
+The following two exercises are taken from Matthew Hirn's Spring 2021 CMSE 890-001 Homework 01\footnote{%
+\texttt{https://matthewhirn.com/teaching/spring-2021-cmse-890-001/spring-2021-cmse-890-001-homework/}
+}
+
+\begin{exercise}
   Let $\bm{M}$ be a symmetric, real valued matrix, and let $\bm{\psi}$ and $\bm{\phi}$ be two eigenvectors of $\bm{M}$
   with eigenvalues $\mu$ and $\nu$, respectively, i.e.,
 
@@ -172,14 +176,45 @@ Practical enough to compute a few small eigenvalues (there are numerical techniq
     and thus $\bm{\psi}$ is orthogonal to $\bm{\phi}$.
 \end{proof}
 
-\begin{exercise}[taken from Matthew Hirn's Spring 2021 CMSE 890-001 Homework 01]
+\begin{exercise}
   Let $\bm{M}$ be a symmetric, real valued matrix with eigenvalues $\lambda_1,\ldots,\lambda_n$ and
   orthonormal eigenvectors $\bm{\psi}_1,\ldots,\bm{\psi}_n$.
   Let $\bm{\Psi}$ be the orthogonal matrix whose $i$-th column is $\bm{\psi}_i$.
   %
-  Prove that $\bm{\Phi}^T \bm{M} \bm{\Phi} = \Lambda$,
+  Prove that $\bm{\Psi}^T \bm{M} \bm{\Psi} = \bm{\Lambda}$,
   where $\bm{\Lambda}$ is the diagonal matrix with $\lambda_1,\ldots,\lambda_n$ on its diagonal.
   %
-  Conclude that $\bm{M}=\bm{\Phi} \bm{\Lambda} \bm{\Phi}^T = \sum_{i=1}^n \lambda_i \bm{\psi}_i\bm{\psi}_i^T$.
+  Conclude that $\bm{M}=\bm{\Psi} \bm{\Lambda} \bm{\Psi}^T = \sum_{i=1}^n \lambda_i \bm{\psi}_i\bm{\psi}_i^T$.
 \end{exercise}
+
+\begin{proof}
+  By definition, we have $(\bm{\Psi}^T \bm{M} \bm{\Psi})(i,j) = \bm{\psi}_i^T \bm{M} \bm{\psi}_j
+  =\bm{\psi}_i^T \lambda_j \bm{\psi}_j = \lambda_j \cdot \langle \bm{\psi}_i, \bm{\psi}_j\rangle$.
+  Since $\bm{\psi}_1,\ldots,\bm{\psi}_n$ are orthonormal, $\langle \bm{\psi}_i, \bm{\psi}_j\rangle =
+  \begin{cases}
+    1 & \text{if } i=j,\\
+    0 & \text{if } i \neq j.
+  \end{cases}$
+%
+  We obtain, $(\bm{\Psi}^T \bm{M} \bm{\Psi})(i,j) = \begin{cases}
+    \lambda_i &\text{if } i=j,\\
+    0 &\text{if }i \neq j,
+  \end{cases}$
+  or $\bm{\Psi}^T \bm{M} \bm{\Psi} = \bm{\Lambda}$.
+
+  To show the second equality, first notice that
+  $(\bm{\Psi}^T\bm{\Psi})(i,j)=\langle\bm{\psi}_i,\bm{\psi}_j\rangle$,
+  and then $\bm{\Psi}^T\bm{\Psi} = \bm{I} = \bm{\Psi} \bm{\Psi}^T$.
+  %
+  From $\left(\bm{\Psi} \bm{\Psi}^T\right)\bm{M}\left(\bm{\Psi} \bm{\Psi}^T\right)
+  = \bm{I} \bm{M} \bm{I}
+  = \bm{\Psi} \bm{\Lambda} \bm{\Psi}^T$, we get $\bm{M}=\bm{\Psi} \bm{\Lambda} \bm{\Psi}^T$.
+
+  Lastly, for any square matrices $A, B$ and a diagonal matrix $D$,
+  it holds $ADB = \sum_{i=1}^n D_{i,i} A_{*,i} B_{i,*}^T$.
+  %
+  In our case, $\bm{\Psi} \bm{\Lambda} \bm{\Psi}^T =
+  \sum_{i=1}^n \lambda_i\bm{\psi}_i \bm{\psi}_i^T$.
+\end{proof}
+
 \end{document}
