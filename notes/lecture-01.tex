@@ -1,0 +1,140 @@
+\documentclass[11pt,letterpaper]{article}
+
+\newcommand\doctitle{Lecture 1 Notes}
+\newcommand\student{Yo Mizutani}
+
+\usepackage{common}
+\usepackage{problem_box}
+
+%===============================================================================
+%    Document body
+%===============================================================================
+\begin{document}
+
+\section{Matrices for Graphs}
+
+\begin{enumerate}[label=(\alph*)]
+  \item Adjacency matrix $\bm{M} \in \R^{n \times n}$: $\bm{M}(a,b) := \begin{cases}
+    w(a,b) & \text{if } ab \in E,\\
+    0 & \text{if } ab \notin E,
+  \end{cases}$
+  where $w(a,b)$ is the weight on edge $ab$ ($w(a,b)=1$ when unweighted).
+  %
+  Three ways to think about such matrices:
+
+  \begin{enumerate}[label=(\arabic*)]
+    \item graph encoding
+    \item operator on a vector $\bm{x} \mapsto \bm{M}\bm{x}$
+    \item quadratic form on a vector $\bm{x} \mapsto \bm{x}^T \bm{M} \bm{x} \in \R$
+  \end{enumerate}
+
+  \item Degree matrix: $\bm{D} := \text{diag}(\bm{M}\bm{1})$,
+  where $\bm{1} \in \R^n$ is the vector of all ones.
+
+  \item Random walk (RW) matrix: $\bm{W} := \bm{M}\bm{D}^{-1}$
+  
+  Probabilities of landing at each vertex after $t$ steps of the random walk, starting at vertex $a$:
+  $\bm{W}^t\bm{\delta}_a$,
+  where $\bm{\delta}_a(b) := \begin{cases}
+    1 & \text{if }b=a,\\
+    0 & \text{if }b \neq a.
+  \end{cases}$
+
+  \begin{remark}
+    $\bm{W}$ is not symmetric but similar to a symmetric matrix  (see Exercise 1).
+  \end{remark}
+
+  \item Graph Laplacian: $\bm{L} := \bm{D} - \bm{M}$
+
+  This is discretization of $-\Delta$, the nagation of the second derivative.
+  There are many important properties:
+
+  \begin{enumerate}[label=(\arabic*)]
+    \item $\bm{x}^T\bm{L}\bm{x} = \sum_{ab \in E} w(a,b)(\bm{x}(a) - \bm{x}(b))^2$ (see Exercise 2)
+    \item Function $\bm{x}$ is ``smooth'' if $\bm{x}^T\bm{L}\bm{x}$ is small
+    \item Functions minimizing $\bm{x}^T\bm{L}\bm{x}$ are bottom eigenfunctions of $\bm{L}$
+
+    \textcolor{red}{What does this mean?}
+
+    \item $\bm{L}$ is a real-valued symmetric matrix, so positive semi-definite
+    \item $\lambda_1=0$
+  \end{enumerate}
+  
+  \item Total variation: $TV_G(\bm{x}) := \sum_{ab \in E} w(a,b) \left|\bm{x}(a) - \bm{x}(b)\right|$.
+  \item Laplacian for random walk: $\bm{L}_{RW} := (\bm{D}-\bm{M})\bm{D}^{-1} = \bm{I} - \bm{M}\bm{D}$
+  \item Symmetric Laplacian: $\bm{L}_{SYM} := \bm{I} - \bm{D}^{-1/2}\bm{M}\bm{D}^{-1/2}$
+
+  \textcolor{red}{Why is this useful?}
+
+  \item Incidence matrix $\bm{B} \in \{0,1\}^{n \times m}$: $\bm{B}(v,e) := \begin{cases}
+    1 &\text{if } v \in e,\\
+    0 &\text{if } v \notin e.
+  \end{cases}$
+
+  Properties:
+  \begin{enumerate}[label=(\arabic*)]
+  \item $\bm{B}\bm{B}^T = \bm{D} + \bm{M}$.
+  \item $\bm{B}^T \bm{B}=2\bm{I} + \bm{M}_{L(G)}$, where $L(G)$ denotes the line graph of graph $G$.
+  \end{enumerate}
+\end{enumerate}
+
+\textbf{Observation.} Minimizing $\bm{x}^T\bm{L}\bm{x}$ is analogous to minimizing $|\nabla \bm{x}|^2$,
+while minimizing $TV_G(\bm{x})$ is analogous to minimizing $|\nabla x|$.
+
+\section{Applications}
+
+\begin{enumerate}[label=(\alph*)]
+  \item $\lambda_i$ is small $\Longrightarrow$ $\psi_i$ has low frequency;
+  $\lambda_i$ is large $\Longrightarrow$ $\psi_i$ has high frequency.
+
+  \item Graph embedding $V \to \R^{k-1}$: $i \mapsto (\psi_2(i), \psi_3(i), \ldots, \psi_k(i))$.
+  \item Graph clustering
+  \item Graph signal processing: think of $\psi_i$ as Fourier modes.
+  \begin{enumerate}[label=(\arabic*)]
+    \item extend Fourier analysis to graphical context
+    \item ``convolution'' on graphs
+    \item graph CNNs
+    
+    \textcolor{red}{Review Fourier analysis}
+  \end{enumerate}
+
+\end{enumerate}
+
+\section{Questions}
+
+Q. Is it easy to compute eigenvalues on large graphs?
+
+A. It depends on sparsity, rank, etc. of the adjacency matrix.
+%
+Practical enough to compute a few small eigenvalues (there are numerical techniques).
+
+\section{Exercises}
+
+\begin{exercise} Show that $\bm{W}$ is similar to a symmetric matrix.
+\end{exercise}
+
+\begin{exercise} Show $\bm{x}^T\bm{L}\bm{x} = \sum_{ab \in E} w(a,b)(\bm{x}(a) - \bm{x}(b))^2$.
+\end{exercise}
+
+\begin{exercise}[taken from Matthew Hirn's Spring 2021 CMSE 890-001 Homework 01]
+  Let $\bm{M}$ be a symmetric, real valued matrix, and let $\bm{\psi}$ and $\bm{\phi}$ be two eigenvectors of $\bm{M}$
+  with eigenvalues $\mu$ and $\nu$, respectively, i.e.,
+
+  $$\bm{M}\bm{\psi} = \mu \bm{\psi} \text{ and } \bm{M}\bm{\phi} = \nu \bm{\phi}.$$
+
+  Prove that if $\mu \neq \nu$, then $\bm{\psi}$ must be orthogonal to $\bm{\phi}$.
+  %
+  Note that your proof should exploit the symmetry of $\bm{M}$, as this statement is false otherwise.
+\end{exercise}
+
+\begin{exercise}[taken from Matthew Hirn's Spring 2021 CMSE 890-001 Homework 01]
+  Let $\bm{M}$ be a symmetric, real valued matrix with eigenvalues $\lambda_1,\ldots,\lambda_n$ and
+  orthonormal eigenvectors $\bm{\psi}_1,\ldots,\bm{\psi}_n$.
+  Let $\bm{\Psi}$ be the orthogonal matrix whose $i$-th column is $\bm{\psi}_i$.
+  %
+  Prove that $\bm{\Phi}^T \bm{M} \bm{\Phi} = \Lambda$,
+  where $\bm{\Lambda}$ is the diagonal matrix with $\lambda_1,\ldots,\lambda_n$ on its diagonal.
+  %
+  Conclude that $\bm{M}=\bm{\Phi} \bm{\Lambda} \bm{\Phi}^T = \sum_{i=1}^n \lambda_i \bm{\psi}_i\bm{\psi}_i^T$.
+\end{exercise}
+\end{document}
