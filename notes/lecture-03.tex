@@ -1,0 +1,133 @@
+\documentclass[11pt,letterpaper]{article}
+
+\newcommand\doctitle{Lecture 3 Notes}
+\newcommand\student{Kanchana Ruwanpathirana}
+
+\usepackage{common}
+\usepackage{problem_box}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\newcommand{\vOne}{\mathbf{1}}
+\newcommand{\dpro}[1]{\left \langle #1 \right \rangle}
+
+%===============================================================================
+%    Document body
+%===============================================================================
+\begin{document}
+
+\section{Recap}
+\begin{itemize}
+\item Rayleigh quotient and it's relationshiop to eignevalues of a matrix, i.e. Courant-Fischer Theorem,
+\begin{theorem}
+Let $M \in \R^{n \times n}$ be symmetric and real with eigenvalues $\mu_i (i \in [n])$ ($\mu_i \ge \mu_j$ for all $i \le j$). Then, 
+$\mu_k = \max_{S \in \R^n, \text{dim}(S)=k} \min_{x\in S} \frac{x^\top M x}{x^\top x} = \min_{T \in \R^n, \text{dim}(T)=n-k+1} \max_{x\in T} \frac{x^\top M x}{x^\top x}$
+\end{theorem}
+\item Eigenvalues of the laplacian and what it implies about the connectivity of the graph,
+\begin{itemize}
+\item For laplacian $L \in \R^{n \times n}$, we have eigenvalues $0=\lambda_1 \le \lambda_2 \le \dots \le \lambda_n$. $\lambda_1 = 0$ since all ones vector, $\vOne$ gives $L\vOne = 0$ trivially.
+\item A graph is connected if and only if $\lambda_2 > 0$.
+\item Corollary: The number of connected components is equivalent to the multiplicity of the eigenvalue $0$.
+\end{itemize}
+\end{itemize}
+
+\section{Laplacian and Connectivity (contd.)}
+\begin{theorem}
+Let $G=(V,E)$ be a graph and let $L$ be the laplacian. The number of $0$ eigenvalues of $L$ is equal to the number of connected components.
+\end{theorem}
+\begin{proof}
+First, assume $G$ has $k$ connected components such that the vertices are partitioned into $V_1,V_2,\dots,V_k$. Let $\psi_1,\psi_2,\dots,\psi_k$ be such that $\psi_i(u) = \begin{cases} 1/\sqrt{|V_i|}, & u\in V_i \\ 0, & otherwise\end{cases}$. We can see that $L\phi_i = 0$ for all $i \in [k]$ and $\psi_1,\psi_2,\dots,\psi_k$ are orthonormal. Therefore we can see that the multiplicity of eigenvalue $0$ is $\ge k$.
+
+Note that since $\psi^\top L \psi = \sum_{(i,j) \in E, i<j}\left(\psi(i)-\psi(j)\right)^2$ and therefore the value of $x$ is constant for each connected component. Consider $\psi_1,\psi_2,\dots,\psi_k$ again. Assume $\psi$ is a vector orthonormal to all $\psi_1,\psi_2,\dots,\psi_k$. Then $\psi$ has to have at least one non-zero entry and therefore if $\psi(j) \neq 0$ for some $j \in V_i$, then $\psi(a) = \psi(j) \neq 0$ for all $a \in V_i$. Let $S$ be the set of indices of such connected components. Then we can write $\phi$ as a linear combination of $\phi_i$ for $i \in S$ and therefore they cannot be orthogonal. So we can only have $k$ such vectors. 
+\end{proof}
+\begin{theorem}
+Let $G = (V,E,w)$ be a weighted graph and let $\psi$ be an eigenvector of its graph Laplacian with eigenvalue $0$, i.e., $L\psi = 0$. Then $\psi$ must be constant on each of the connected components of $G$.
+\end{theorem}
+\begin{proof}
+Since $L\psi = 0$, we can see that,
+\begin{align*}
+0= \psi^\top L \psi = \sum_{(a,b) \in E} w(a,b) \left(\psi(a)-\psi(b)\right)^2
+\end{align*}
+which implies $\psi(a) = \psi(b)$ if $(a,b) \in E$. 
+Similar to the connectivity theorem, we can consider any two vertices $i,j$ in a connected component of $G$. Then there exists a path $i = v_1,v_2,\dots,v_m=j$. We can see that $\psi(i) = \psi(v_1) = \psi(v_2) = \dots = \psi(v_m) = \psi(j)$ and this applies to any $i,j$ in the connected componente. Therefore, $\psi$ is constant on the connected component.
+\end{proof}
+
+Given that the number of connected components is the multiplicity of the $0$ eigenvalue and given any eigenvector corresponding to a $0$ is constant on a connected component, we can take the Laplacian to cluster a set of given data points by connectivity, by taking the eigenvectors corresponding to the $0$s and then using the orthogonality and the constant nature to figure out the partition.
+
+The magnitude of $\lambda_2 >0$, can be quantitatively used as a measure of how connected the graph is and is used in devising clustering methods (to be discussed in a later lecture).
+
+\section{Complete Graph and Drawing Graphs}
+
+\subsection{Complete Graph}
+
+In this section, we will talk about the spectral properties of the complete graph $K_n = (V,E)$ where $|V| = n$ and $E = \{(a,b) \;\text{s.t.}\; \forall a,b \in V (a \neq b)\}$.
+
+\begin{theorem}
+The graph Laplacian $L$ of $K_n$ has eigenvalue $0$ with multiplicity $1$ and eigenvalue $n$ with multiplicity $n-1$.
+\end{theorem}
+\begin{proof}
+Note that since $K_n$ is connected we do know that it only has $1$ eigenvalue $0$ (and a corresponding eigenvector), i.e. $\lambda_2>0$. In fact the eigenvalue $0$ corresponds to the eigenvector $\vOne$ since $L\vOne = 0$. 
+
+Let $\psi$ be any other eigenvector. Then since $\psi$ is orthogonal to $\vOne$, we have,
+\begin{align*}
+\dpro{\psi,1} = \sum_{a \in V} \psi(a) = 0 \implies \psi(a) = -\sum_{b \in V, b\neq a} \psi(b)
+\end{align*}
+Now consider $L\psi(a)$ for a vertex $a \in V$. We can see that,
+\begin{align*}
+L\psi(a) = \sum_{b \in V, b\neq a} \left(\psi(a)-\psi(b)\right) = \sum_{b \in V} \left(\psi(a)-\psi(b)\right) = n\psi(a)-\sum_{b \in V} \psi(b) = n\psi(a)
+\end{align*}
+Since $a$ was arbitrary, this implies $L\psi = n\psi$ and since there are $n-1$ such eigenvectors we get eigenvalue $n$ with multiplicity $n-1$
+\end{proof}
+An alternative argument is,
+\begin{proof}
+Since $D=(n-1)I_n$ nd $M = \vOne\vOne^\top - I_n$
+\begin{align*}
+L = D-M = nI_n-\vOne\vOne^\top = nI_n-n\frac{\vOne}{\|\vOne\|}\frac{\vOne^\top}{\|\vOne\|}
+\end{align*}
+and since $I_n$ is full-rank we can see that all directions except $\vOne$ would have eigenvalue $n$. Therefore we have multiplicity $n-1$.
+\end{proof}
+
+\subsection{Drawing Graphs}
+
+In this section, we try to justify the planar embeddings of graphs using the first two non-trivial eigenvectors of the Laplacians, i.e. using the map $a \mapsto \left(\psi_2(a),\psi_3(a)\right)$.
+
+We can first try to embed a graph into a line. The obvious candidate that preserves neighborhoods is to use $x = \arg \inf_{z \in \R^n} z^\top Lz = \sum_{(a,b) \in E} \left(z(a)-z(b)\right)^2$. However, this could just map everything to $x=0$. We can then try to remedy this by introducing the constraint $\|x\|=1$, however the vector $\frac{1}{\sqrt{n}}\vOne$ minimizes this while mapping everything to $\frac{1}{\sqrt{n}}$. So we could also add the constraint $\dpro{x,\vOne} = 0$. This gives us, $x = \arg \inf_{z \in \R^n, \|z\|=1, \dpro{z,1}=0} z^\top Lz$ which is basically $\psi_2$ from Courant Fischer. This ives us an intuition as to why the top eigenvectors are good embeddings.
+
+Following the same line of argument, when we want to embed a graph into $\R^2$, we can first consider, $x,y = \arg \inf_{z_1,z_2 \in \R^n} \sum_{(a,b) \in E}\left \|\begin{pmatrix}z_1(a) \\ z_2(a)\end{pmatrix}-\begin{pmatrix}z_1(b) \\ z_2(b)\end{pmatrix}\right\|^2 = \arg \inf_{z_1,z_2 \in \R^n} \sum_{(a,b) \in E} \left(z_1(a)-z_1(b)\right)^2+\left(z_2(a)-z_2(b)\right)^2 = \arg \inf_{z_1,z_2 \in \R^n} z_1^\top L z_1 + z_2^\top L z_2$. We can see that similar to before, we would require $\|x\|=\|y\|=1$ and $\dpro{x,1} = \dpro{y,1} = 0$. We also need $\dpro{x,y}=0$ since otherwise we would get $x=y= \psi_2$ as a solution (which again embeds things to a line). Therefore, in the end we get,
+\begin{align*}
+x,y =  \underset{\substack{z_1,z_2 \in \R^n \\ \|z_1\|=\|z_2\|=1 \\ \dpro{z_1,\vOne}=\dpro{z_2,\vOne}=\dpro{z_1,z_2}=0}}{\arg \inf} \sum_{(a,b) \in E}\left \|\begin{pmatrix}z_1(a) \\ z_2(a)\end{pmatrix}-\begin{pmatrix}z_1(b) \\ z_2(b)\end{pmatrix}\right\|^2
+\end{align*}
+for which $\psi_2,\psi_3$ are natural solutions.
+
+This can be extended to general $k$ with $x_1,x_2,\dots,x_k = \underset{z_1,z_2,\dots,z_k}{\arg \inf} \sum_{i=1}^k z_i^\top L z_i$ subject to $\dpro{z_i,\vOne} = 0$ and $\dpro{z_i,z_j} = \delta(i-j)$.
+
+\begin{theorem}
+Let $G = (V,E)$ be a graph and let $0=\lambda_1 \le \lambda_2 \le \dots \le \lambda_n$ be the eigenvalues of the laplacian $L$ (of $G$) with associated orthonormal eigenvectors $\psi_1,\psi_2,\dots,\psi_n$. Let $x_1,x_2,\dots,x_k \in \R^n$ be orthonormal vectors orthogonal to $\vOne$. Then,
+\begin{align*}
+\sum_{i=1}^k x_i^\top L x_i \ge \sum_{i=2}^{k+1} \lambda_i
+\end{align*}
+and the equality is achieved if and only if, $\dpro{x_i,\psi_j} = 0$ for all $j$ such that $\lambda_j > \lambda_{k+1}$ 
+\end{theorem}
+
+\begin{proof}
+Let $x_1,x_2,\dots,x_n$ be an orthonormal basis for $\R^n$, that was extended from $x_1,x_2,\dots,x_k$. Since $\psi_1,\psi_2,\dots,\psi_n$ is also an orthonormal basis, we can see that, $\|\psi_j\|^2 = \sum_{i=1}^n \dpro{x_i,\psi_j}^2 = 1$ and $\|x_i\|^2 = \sum_{j=1}^n \dpro{x_i,\psi_j}^2=1$. 
+
+Let $\psi_1$ be the constant vector. Since $\dpro{x_i,\psi_1} = 0$ for $1 \le i \le k$, we can get, $\forall \; 1 \le i \le k$,
+\begin{align*}
+x_i^\top L x_i &= \sum_{j=2}^n \lambda_j \dpro{x_i,\psi_j}^2 = \lambda_{k+1} + \sum_{j=2}^n \left(\lambda_j-\lambda_{k+1}\right) \dpro{x_i,\psi_j}^2 \\
+&= \lambda_{k+1} + \sum_{j=2}^{k+1} \left(\lambda_j-\lambda_{k+1}\right) \dpro{x_i,\psi_j}^2 + \sum_{j=k+2}^n \left(\lambda_j-\lambda_{k+1}\right) \dpro{x_i,\psi_j}^2 \\
+& \ge \lambda_{k+1} + \sum_{j=2}^{k+1} \left(\lambda_j-\lambda_{k+1}\right) \dpro{x_i,\psi_j}^2
+\end{align*}
+We only have equality in this inequality when $\dpro{x_i,\psi_j} = 0$ for all $j$ with $\lambda_j > \lambda_{k+1}$.
+
+Now we can see that,
+\begin{align*}
+\sum_{i=1}^k x_i^\top L x_i &\ge k \lambda_{k+1} + \sum_{i=1}^k \sum_{j=2}^{k+1} \left(\lambda_j-\lambda_{k+1}\right) \dpro{x_i,\psi_j}^2 = k \lambda_{k+1} +  \sum_{j=2}^{k+1} \left(\lambda_j-\lambda_{k+1}\right) \sum_{i=1}^k \dpro{x_i,\psi_j}^2 \\
+& \ge k\lambda_{k+1} + \sum_{j=2}^{k+1} \left(\lambda_j-\lambda_{k+1}\right) \; \text{(Since $\lambda_j \le \lambda_{k+1}$ and $\sum_{i=1}^k \dpro{x_i,\psi_j}^2 \le 1$)}\\
+& \ge \sum_{j=2}^{k+1} \lambda_j
+\end{align*}
+\end{proof}
+
+This shows you that the embedding $\psi_2,\psi_3,\dots,\psi_{k+1}$ is an optimal embedding.
+
+\end{document}
