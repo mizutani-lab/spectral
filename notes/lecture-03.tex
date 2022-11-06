@@ -1,0 +1,115 @@
+\documentclass[11pt,letterpaper]{article}
+
+\newcommand\doctitle{Lecture 3 Notes}
+\newcommand\student{Scribe: Yo Mizutani}
+
+\usepackage{common}
+\usepackage{problem_box}
+
+%===============================================================================
+%    Document body
+%===============================================================================
+\begin{document}
+
+Source available at: \texttt{https://github.com/mizutani-lab/spectral}
+
+Lecturer: Kanchana
+
+\section{Recap: the Laplacian and connectivity}
+
+\begin{itemize}
+    \item Courant-Fischer Theorem
+    \begin{itemize}
+        \item Eigenvalues $\leftrightarrow$ Reyleigh quatient
+    \end{itemize}
+    \item Connectivity of a graph $G$ and eigenvalues
+    \begin{itemize}
+        \item $\lambda_2 > 0$ iff $G$ is connected
+    \end{itemize}
+    
+\end{itemize}
+
+\begin{theorem}\label{thm:connected}
+    Multiplicity of 0 eigenvalue = number of connected components of a graph $G$.
+\end{theorem}
+
+\begin{proof}
+    (1)Let's assume we have $G = \bigcup_{i=1}^k G_i$ such that
+    $G_1 \cap G_j = \emptyset$ if $i \neq j$.
+
+    To show that the multiplicity of 0 eigenvalue $\geq k$,
+    consider $\psi_1,\psi_2,\dots,\psi_k$ such that
+
+    $\psi_i(u) = \begin{cases}
+        \frac{1}{\sqrt{|V(G_i)|}} &\text{if } u \in V(G_i),\\
+        0&\text{otherwise}.
+    \end{cases}$
+
+    Recall $L\psi(a)=\sum_{(a,b)\in E}\psi(a) - \psi(b)$.
+    For any $\psi_i$, $L\psi_i=0$, and $\{\psi_i\}$ is linearly independent (i.e. $\langle \psi_i, \psi_j \rangle=0$ for $i \neq j$).
+    So, the multiplicity of 0 eigenvalue is at least $k$, the number of connected components of $G$.
+
+    (2)
+    Now, assume $L \psi = 0$.
+    Then, $\psi^T L \psi = \sum_{(i,j)\in E} \left(\psi(i) - \psi(j)\right)^2=0$.
+    That is, for every $i,j \in E$, $\psi(i)=\psi(j)$.
+%
+    If $G$ has a connected component $G'$, then $\psi(v_1)=\psi(v_2)=\ldots=\psi(v_{|V(G')|})$ for all $v_i \in V(G')$.
+    The number of connected components of $G'$ is at least the multiplicity of 0 eigenvalue.
+\end{proof}
+
+\begin{remark}
+    The same argument applies to the weighted version: $G=(V,E,w)$ with positive weights ($w$).
+    We use the fact that $\psi ^T L \psi = \sum_{(i,j)\in E} w(i,j)\left(\psi(i) - \psi(j)\right)^2$.
+\end{remark}
+
+\begin{remark}
+    $\lambda_2$ is used as a pseudomeasure how connected a graph is.
+\end{remark}
+
+\section{Complete Graphs}
+
+An (unweighted) complete graph $K_n = (V,E)$ has
+$V=\{1,2,\ldots,n\}$ and $E=\{(i,j) | i \neq j \in V\}$.
+
+\begin{theorem}
+    The Laplacian $L$ of $K_n$ has eigenvalue 0 with multiplicity $1$ and eigenvalue $n$ with multiplicity $n-1$.
+\end{theorem}
+
+\begin{proof}
+    From \cref{thm:connected}, we know $\lambda_1=0$ and $\lambda_2>0$.
+    It is also clear to see $L\bm{1}=\bm{0}$.
+
+    Consider any eigenvector $\psi$ such that $\langle \psi, \bm{1} \rangle = 0$.
+    From $L\psi(a) = \sum_{b \in V: b\neq a} \left(\psi(a) - \psi(b)\right)$,
+    we get $L\psi(a) = (n-1)\psi(a) - \sum_{b\in V: b\neq a}\psi(b)=n \psi(a)$
+    because $\sum_{b \in V} \psi(b) = 0$.
+    Every vector orthogonal to $\bm{1}$ is an eigenvector of $\bm{L}$ with eigenvalue $n$,
+    and so the eigenvalue $n$ has multiplicity $n-1$.
+\end{proof}
+
+Another view:
+\begin{itemize}
+    \item $D = (n-1) I_n$
+    \item $M=\bm{1}\bm{1}^T - I_n$
+    \item $L=D-M=n I_n - \bm{1}\bm{1}^T = nI_n - n \hat{\bm{1}}\hat{\bm{1}}^T$,
+    where $\hat{\bm{1}} = \left[\frac{1}{\sqrt{n}}, \frac{1}{\sqrt{n}}, \ldots \right]^T$
+\end{itemize}
+
+
+\section{Drawing Graphs}
+
+\subsection{Embedding a graph into $\R$}
+
+Candidate: $\displaystyle \bm{x}=\argmin_{\substack{z \in \R^n\\ ||\bm{x}||=1\\ \langle \bm{x}, \bm{1}\rangle=0}} z^T L z = \sum_{(a,b)\in E} \left(z(a) - z(b)\right)^2$
+
+We know that $\bm{x} = \psi_2$ will be the solution.
+
+\subsection{Embedding a graph into $\R^k$}
+
+We want: $\displaystyle \bm{x}_1,\ldots,\bm{x}_k = \argmin_{z_1,\ldots,z_k}\sum_{i=1}^k z_i^T L z_i$
+subject to $\langle z_i, z_j\rangle = \delta(i-j)$ and $\langle z_i,\bm{1}\rangle = 0$ .
+
+A natural candidate is $\bm{x}_i=\psi_{i+1}$. This is the best we can do (refer to Hirn's lecture notes).
+
+\end{document}
